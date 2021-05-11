@@ -4,7 +4,6 @@ import com.aykuttasil.moviee.data.network.api.SearchMovieResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-
 interface MovieService {
 
     @GET("search/movie")

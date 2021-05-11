@@ -22,15 +22,6 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             liveMovie.value = movieRepository.searchMovie(query, page)
         }
-
-        /*
-        val list = mutableListOf<MovieEntity>()
-        for (i in 1..10) {
-            list.add(MovieEntity(i, "Movie $i - $query"))
-        }
-        liveMovie.value = list
-        */
     }
-
 
 }

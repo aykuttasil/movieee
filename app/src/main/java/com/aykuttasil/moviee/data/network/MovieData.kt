@@ -1,5 +1,6 @@
 package com.aykuttasil.moviee.data.network
 
+import com.aykuttasil.moviee.domain.MovieEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -34,3 +35,14 @@ data class MovieData(
     @Json(name = "vote_count")
     val voteCount: Int? = null
 )
+
+fun MovieData.mapToEntity(): MovieEntity {
+    return MovieEntity(
+        id,
+        title,
+        posterPath,
+        backdropPath,
+        overview,
+        voteAverage
+    )
+}

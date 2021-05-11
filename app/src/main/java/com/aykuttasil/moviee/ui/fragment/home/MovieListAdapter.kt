@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.aykuttasil.moviee.databinding.ItemMovieBinding
 import com.aykuttasil.moviee.domain.MovieEntity
 
@@ -24,7 +25,9 @@ class MovieListAdapter :
     inner class MovieViewHolder(private val binding: ItemMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieEntity) {
-            binding.textView.text = movie.movieTitle
+            binding.txtTitle.text = movie.title
+            binding.imgMovie.load("https://image.tmdb.org/t/p/w500/${movie.posterPath}")
+            binding.txtScore.text = movie.voteAverage.toString()
         }
     }
 
@@ -40,7 +43,7 @@ class MovieListAdapter :
             oldItem: MovieEntity,
             newItem: MovieEntity
         ): Boolean {
-            return oldItem.movieId == newItem.movieId
+            return oldItem.id == newItem.id
         }
     }
 }

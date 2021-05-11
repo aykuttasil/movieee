@@ -1,6 +1,7 @@
 package com.aykuttasil.moviee.data.repository
 
 import com.aykuttasil.moviee.data.network.MovieService
+import com.aykuttasil.moviee.data.network.mapToEntity
 import com.aykuttasil.moviee.di.NetworkModule
 import com.aykuttasil.moviee.domain.MovieEntity
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class MovieRepository @Inject constructor(
     suspend fun searchMovie(query: String, page: Int = 1): List<MovieEntity> {
         val resp = movieService.searchMovie(query, page, NetworkModule.API_KEY)
         return resp.results?.map {
-            MovieEntity(it.id, it.title)
+            it.mapToEntity()
         } ?: emptyList()
     }
 }

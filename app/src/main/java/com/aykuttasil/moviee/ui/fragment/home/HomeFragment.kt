@@ -7,11 +7,8 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import com.aykuttasil.moviee.databinding.FragmentHomeBinding
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,13 +52,9 @@ class HomeFragment : Fragment() {
         val recyclerView = binding.listMovie
         recyclerView.adapter = movieListAdapter
 
-        val layoutManager = FlexboxLayoutManager(context)
-        layoutManager.flexDirection = FlexDirection.ROW
-        layoutManager.justifyContent = JustifyContent.SPACE_AROUND
-        layoutManager.flexWrap = FlexWrap.WRAP
+        val layoutManager = GridLayoutManager(context, 2)
         recyclerView.layoutManager = layoutManager
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
