@@ -1,6 +1,6 @@
 package com.aykuttasil.moviee.data.network.api
 
-import com.aykuttasil.moviee.data.network.MovieData
+import com.aykuttasil.moviee.data.network.model.MovieData
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)

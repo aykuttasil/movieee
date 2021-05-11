@@ -1,4 +1,4 @@
-package com.aykuttasil.moviee.data.network
+package com.aykuttasil.moviee.data.network.model
 
 import com.aykuttasil.moviee.domain.MovieEntity
 import com.squareup.moshi.Json

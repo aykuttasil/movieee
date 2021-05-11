@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.aykuttasil.moviee.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,15 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val movieListAdapter = MovieListAdapter()
+    private val movieListAdapter = MovieListAdapter {
+        val direction = HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment(
+            it.id!!,
+            it.title ?: "",
+            it.voteAverage?.toString() ?: "0",
+            "https://image.tmdb.org/t/p/w500/${it.posterPath}"
+        )
+        findNavController().navigate(direction)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

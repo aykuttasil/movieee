@@ -9,7 +9,7 @@ import coil.load
 import com.aykuttasil.moviee.databinding.ItemMovieBinding
 import com.aykuttasil.moviee.domain.MovieEntity
 
-class MovieListAdapter :
+class MovieListAdapter(val callback: (movie: MovieEntity) -> Any) :
     ListAdapter<MovieEntity, MovieListAdapter.MovieViewHolder>(DataMovieItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -28,6 +28,8 @@ class MovieListAdapter :
             binding.txtTitle.text = movie.title
             binding.imgMovie.load("https://image.tmdb.org/t/p/w500/${movie.posterPath}")
             binding.txtScore.text = movie.voteAverage.toString()
+
+            binding.movieItemContainer.setOnClickListener { callback.invoke(movie) }
         }
     }
 

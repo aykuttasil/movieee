@@ -7,13 +7,32 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.aykuttasil.moviee.ui.fragment.home.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="HomeFragment">
         <action
             android:id="@+id/action_homeFragment_to_movieDetailFragment"
-            app:destination="@id/movieDetailFragment" />
+            app:destination="@id/movieDetailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
         android:name="com.aykuttasil.moviee.ui.fragment.moviedetail.MovieDetailFragment"
-        android:label="MovieDetailFragment" />
+        android:label="MovieDetailFragment">
+        <argument
+            android:name="movieId"
+            app:argType="integer" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="vote"
+            app:argType="string" />
+        <argument
+            android:name="posterImageUrl"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -17,10 +17,13 @@ class HomeViewModel @Inject constructor(
 ) : AndroidViewModel(app) {
 
     val liveMovie: MutableLiveData<List<MovieEntity>> = MutableLiveData()
+    var queryText = ""
 
     fun searchMovie(query: String, page: Int = 1) {
+        if (queryText == query) return
         viewModelScope.launch {
             liveMovie.value = movieRepository.searchMovie(query, page)
+            queryText = query
         }
     }
 
