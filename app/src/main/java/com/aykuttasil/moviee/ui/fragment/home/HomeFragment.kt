@@ -7,10 +7,18 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.aykuttasil.moviee.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -19,6 +27,9 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private var searchJob: Job? = null
+    private var lastSearchQuery: String? = null
 
     private val movieListAdapter = MovieListAdapter {
         val direction = HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment(
@@ -42,18 +53,38 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        observeData()
 
-        binding.inputMovieDetail.doOnTextChanged { text, start, before, count ->
-            if (count > 1) {
-                viewModel.searchMovie(text.toString())
+        val query = savedInstanceState?.getString(LAST_SEARCH_QUERY)
+
+        binding.inputMovieDetail.doOnTextChanged { text, _, _, count ->
+            if (count > 1 && lastSearchQuery != text.toString()) {
+                search(text.toString())
+                lastSearchQuery = text.toString()
             }
         }
+
+        /*
+        viewLifecycleOwner.lifecycleScope.launch {
+            movieListAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { binding.listMovie.scrollToPosition(0) }
+        }
+        */
+
     }
 
-    private fun observeData() {
-        viewModel.liveMovie.observe(viewLifecycleOwner) {
-            movieListAdapter.submitList(it)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(LAST_SEARCH_QUERY, binding.inputMovieDetail.text?.trim().toString())
+    }
+
+    private fun search(query: String) {
+        searchJob?.cancel()
+        searchJob = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.searchMovie(query).collectLatest {
+                movieListAdapter.submitData(it)
+            }
         }
     }
 
@@ -68,5 +99,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val LAST_SEARCH_QUERY: String = "last_search_query"
     }
 }
